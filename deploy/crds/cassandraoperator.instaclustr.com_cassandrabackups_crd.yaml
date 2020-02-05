@@ -50,11 +50,15 @@ spec:
             bandwidth:
               type: string
             cdc:
-              description: Cassandra DC name to back up. Used to find the pods in
-                the CDC
+              type: string
+            cluster:
               type: string
             concurrentConnections:
               type: integer
+            datacenter:
+              description: Cassandra DC name to back up. Used to find the pods in
+                the CDC
+              type: string
             duration:
               type: string
             keyspaces:
@@ -72,6 +76,8 @@ spec:
               type: string
           required:
           - cdc
+          - cluster
+          - datacenter
           - snapshotTag
           - storageLocation
           type: object

@@ -9,15 +9,17 @@ import (
 )
 
 const (
-	rackKey = "cassandra-operator.instaclustr.com/rack"
-	cdcKey  = "cassandra-operator.instaclustr.com/datacenter"
+	rackKey       = "cassandra-operator.instaclustr.com/rack"
+	datacenterKey = "cassandra-operator.instaclustr.com/datacenter"
+	clusterKey    = "cassandra-operator.instaclustr.com/cluster"
 )
 
 // ANNOTATIONS
 
 func DataCenterAnnotations(cdc *cassandraoperatorv1alpha1.CassandraDataCenter) map[string]string {
 	return map[string]string{
-		cdcKey:                         cdc.Name,
+		datacenterKey:                  cdc.DataCenter,
+		clusterKey:                     cdc.Cluster,
 		"app.kubernetes.io/managed-by": "com.instaclustr.cassandra-operator",
 	}
 }
@@ -79,7 +81,8 @@ func CustomStatefulSetAnnotations(cdc *cassandraoperatorv1alpha1.CassandraDataCe
 
 func DataCenterLabels(cdc *cassandraoperatorv1alpha1.CassandraDataCenter) map[string]string {
 	return map[string]string{
-		cdcKey:                         cdc.Name,
+		datacenterKey:                  cdc.DataCenter,
+		clusterKey:                     cdc.Cluster,
 		"app.kubernetes.io/managed-by": "com.instaclustr.cassandra-operator",
 	}
 }
@@ -143,7 +146,7 @@ func DataCenterResourceMetadata(cdc *cassandraoperatorv1alpha1.CassandraDataCent
 
 	return metav1.ObjectMeta{
 		Namespace: cdc.Namespace,
-		Name:      "cassandra-" + cdc.Name + suffix,
+		Name:      "cassandra-" + cdc.Cluster + "-" + cdc.DataCenter + suffix,
 		Labels:    DataCenterLabels(cdc),
 	}
 }
@@ -162,7 +165,7 @@ func RackMetadata(cdc *cassandraoperatorv1alpha1.CassandraDataCenter, rack *clus
 	suffix := strings.Join(append([]string{""}, suffixes...), "-")
 	return metav1.ObjectMeta{
 		Namespace: cdc.Namespace,
-		Name:      "cassandra-" + cdc.Name + suffix + "-" + rack.Name,
+		Name:      "cassandra-" + cdc.Cluster + "-" + cdc.DataCenter + suffix + "-" + rack.Name,
 		Labels:    RackLabels(cdc, rack),
 	}
 }

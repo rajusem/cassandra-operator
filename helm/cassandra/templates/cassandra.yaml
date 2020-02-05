@@ -24,6 +24,11 @@ spec:
 {{ toYaml .Values.imagePullSecrets | indent 4}}
   {{- end }}
 
+  {{- if .Values.imagePullSecrets }}
+  imagePullSecrets:
+    - name: {{ .Values.imagePullSecrets }}
+  {{- end }}
+
   {{- if .Values.cassandraEnv }}
   cassandraEnv:
 {{ toYaml .Values.cassandraEnv | indent 4 }}

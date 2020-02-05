@@ -132,7 +132,7 @@ func newStatefulSetSpec(
 	podRackLabels := RackLabels(cdc, rack)
 	podLabels := PodTemplateSpecLabels(cdc)
 	statefulSetSpec := &v1.StatefulSetSpec{
-		ServiceName: "cassandra-" + cdc.Name + "-nodes",
+		ServiceName: "cassandra-" + cdc.Cluster + "-" + cdc.DataCenter + "-nodes",
 		Replicas:    &rack.Replicas,
 		Selector:    &metav1.LabelSelector{MatchLabels: podRackLabels},
 		Template: corev1.PodTemplateSpec{
@@ -159,7 +159,6 @@ func newPodSpec(
 	containers []corev1.Container,
 	initContainers []corev1.Container,
 	securityContext *corev1.PodSecurityContext) *corev1.PodSpec {
-	// TODO: should this spec be fully exposed into the CDC.Spec?
 	podSpec := &corev1.PodSpec{
 		Volumes:            volumes,
 		Containers:         containers,
@@ -328,14 +327,14 @@ func newRestoreContainer(
 		return nil, err
 	}
 
-	if len(backup.Spec.CDC) == 0 {
+	if len(backup.Spec.Datacenter) == 0 {
 		return nil, errors.New(fmt.Sprintf("cdc field in backup CRD %s was not set!", cdc.Spec.Restore.BackupName))
 	}
 
 	restoreArgs := []string{
 		"restore",
 		"--snapshot-tag=" + backup.Spec.SnapshotTag,
-		"--storage-location=" + backup.Spec.StorageLocation + "/" + backup.Spec.CDC,
+		"--storage-location=" + backup.Spec.StorageLocation + "/" + backup.Spec.Cluster + "/" + backup.Spec.Datacenter,
 		"--k8s-namespace=" + cdc.Namespace,
 		"--k8s-backup-secret-name=" + backup.Secret,
 	}
@@ -696,7 +695,8 @@ func getStatefulSets(rctx *reconciliationRequestContext) ([]v1.StatefulSet, erro
 	listOptions := []client.ListOption{
 		client.InNamespace(rctx.cdc.Namespace),
 		client.MatchingLabels{
-			"cassandra-operator.instaclustr.com/datacenter": rctx.cdc.Name,
+			"cassandra-operator.instaclustr.com/datacenter": rctx.cdc.DataCenter,
+			"cassandra-operator.instaclustr.com/cluster":    rctx.cdc.Cluster,
 		},
 	}
 

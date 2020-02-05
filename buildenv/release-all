@@ -17,7 +17,7 @@ function defer {
 trap defer EXIT
 
 if [[ $REGISTRY == gcr.io/* ]]; then
-	gcloud docker -a
+  yes | gcloud auth configure-docker
 fi
 
 export DONT_LOGIN="true"

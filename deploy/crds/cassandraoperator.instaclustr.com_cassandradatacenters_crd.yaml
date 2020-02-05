@@ -22,6 +22,10 @@ spec:
             of an object. Servers should convert recognized schemas to the latest
             internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
           type: string
+        cluster:
+          type: string
+        datacenter:
+          type: string
         kind:
           description: 'Kind is a string value representing the REST resource this
             object represents. Servers may infer this from the endpoint the client
@@ -681,6 +685,9 @@ spec:
         status:
           description: CassandraDataCenterStatus defines the observed state of CassandraDataCenter
           type: object
+      required:
+      - cluster
+      - datacenter
       type: object
   version: v1alpha1
   versions:

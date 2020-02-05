@@ -16,7 +16,10 @@ RUN dagi google-cloud-sdk docker-engine
 
 RUN dagi kubectl
 
-RUN curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+RUN curl https://get.helm.sh/helm-v3.0.3-linux-amd64.tar.gz -o /tmp/helm-v3.0.3-linux-amd64.tar.gz \
+    && (cd /tmp && tar -zxvf /tmp/helm-v3.0.3-linux-amd64.tar.gz && mv /tmp/linux-amd64/helm /usr/local/bin/helm) \
+    && chmod +x /usr/local/bin/helm \
+    && rm -rf /tmp/helm* /tmp/linux-amd64
 
 RUN curl -s https://packagecloud.io/install/repositories/datawireio/telepresence/script.deb.sh | bash
 

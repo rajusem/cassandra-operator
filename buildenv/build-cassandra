@@ -16,6 +16,6 @@ while IFS="" read -r line || [[ -n "$line" ]]; do
     echo "Building ${REGISTRY}-:${line}"
     docker build --tag "${REGISTRY}-${cassandra_version}:${cassandra_image_version}" \
                  --tag "${1}-${cassandra_version}:${cassandra_image_version}" \
-                --build-arg cassandra_version="${cassandra_version}" \
-                docker/${1} 1>/dev/null
+                 --build-arg cassandra_version="${cassandra_version}" \
+                 docker/${1} 1>/dev/null
 done < buildenv/CASSANDRA_VERSIONS

@@ -113,6 +113,18 @@ func schema_pkg_apis_cassandraoperator_v1alpha1_CassandraBackupSpec(ref common.R
 				Properties: map[string]spec.Schema{
 					"cdc": {
 						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"cluster": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"datacenter": {
+						SchemaProps: spec.SchemaProps{
 							Description: "Cassandra DC name to back up. Used to find the pods in the CDC",
 							Type:        []string{"string"},
 							Format:      "",
@@ -175,7 +187,7 @@ func schema_pkg_apis_cassandraoperator_v1alpha1_CassandraBackupSpec(ref common.R
 						},
 					},
 				},
-				Required: []string{"cdc", "storageLocation", "snapshotTag"},
+				Required: []string{"cdc", "cluster", "datacenter", "storageLocation", "snapshotTag"},
 			},
 		},
 	}
@@ -308,6 +320,18 @@ func schema_pkg_apis_cassandraoperator_v1alpha1_CassandraDataCenter(ref common.R
 							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
 						},
 					},
+					"cluster": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"datacenter": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("github.com/instaclustr/cassandra-operator/pkg/apis/cassandraoperator/v1alpha1.CassandraDataCenterSpec"),
@@ -319,6 +343,7 @@ func schema_pkg_apis_cassandraoperator_v1alpha1_CassandraDataCenter(ref common.R
 						},
 					},
 				},
+				Required: []string{"cluster", "datacenter"},
 			},
 		},
 		Dependencies: []string{
