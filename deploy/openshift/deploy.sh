@@ -39,11 +39,18 @@ sleep 10
 oc_apply "${here}/bundle.yaml"
 sleep 10
 
-echo "Creating Cassandra pods"
+# echo "Creating Cassandra pods"
 cd ../examples
 here=$( pwd )
 
 # echo "${here}"
+# echo "${AVALIBILITY_ZONE}"
+
+OPENSHIFT_DATACENTER_EXAMPLE=${here}/example-openshift-datacenter.yaml
+sed -i.bckp "s/us-east-1/${AVALIBILITY_ZONE}/g" ${OPENSHIFT_DATACENTER_EXAMPLE}
+sed -i.bckp "s/gp2/${STORAGE_CLASS_NAME}/g" ${OPENSHIFT_DATACENTER_EXAMPLE}
+# cat "${OPENSHIFT_DATACENTER_EXAMPLE}"
+
 oc_apply "${here}/example-openshift-datacenter.yaml"
 
 x=15
@@ -70,3 +77,7 @@ if [ $pod_created == true ] ; then
 else
     echo "Either facing some issue or its taking more time to install. You can check log manually on openshift."
 fi
+
+#replacing availibilty zone and storage class to original state
+sed -i.bckp "s/${AVALIBILITY_ZONE}/us-east-1/g" ${OPENSHIFT_DATACENTER_EXAMPLE}
+sed -i.bckp "s/${STORAGE_CLASS_NAME}/gp2/g" ${OPENSHIFT_DATACENTER_EXAMPLE}

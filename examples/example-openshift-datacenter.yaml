@@ -1,7 +1,7 @@
 apiVersion: cassandraoperator.instaclustr.com/v1alpha1
 kind: CassandraDataCenter
 metadata:
-  name: test-dc-cassandra
+  name: test-dc
   labels:
     app: cassandra
 spec:
@@ -10,13 +10,13 @@ spec:
   serviceAccountName: cassandra-performance
   nodes: 3
   racks:
-    - name: "east1-a"
+    - name: "rack-1"
       labels:
         failure-domain.beta.kubernetes.io/zone: us-east-1a
-    - name: "east1-b"
+    - name: "rack-2"
       labels:
         failure-domain.beta.kubernetes.io/zone: us-east-1b
-    - name: "east1-c"
+    - name: "rack-3"
       labels:
         failure-domain.beta.kubernetes.io/zone: us-east-1c
   cassandraImage: "gcr.io/cassandra-operator/cassandra-3.11.5:latest"
@@ -41,7 +41,7 @@ spec:
     storageClassName: gp2
     resources:
       requests:
-        storage: 5Gi
+        storage: 2Gi
 
 #  userConfigMapVolumeSource:
 #    name: test-dc-cassandra-user-config
@@ -61,10 +61,10 @@ spec:
 #  sidecarSecretVolumeSource:
 #    secretName: test-cassandra-dc-ssl-sidecar
 
-  cassandraAuth:
-    authenticator: PasswordAuthenticator
-    authorizer: CassandraAuthorizer
-    roleManager: CassandraRoleManager
+  # cassandraAuth:
+  #   authenticator: PasswordAuthenticator
+  #   authorizer: CassandraAuthorizer
+  #   roleManager: CassandraRoleManager
 
 #  operatorLabels:
 #    prometheusService:
