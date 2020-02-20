@@ -6,7 +6,7 @@ This page will help you to deploy instaclustr cassandra into your openshift clus
 
 #### Step1: Clone this repo. 
 ```bash
-git clone https://github.com/rajusem/cassandra-operator.git
+git clone -b openshift --single-branch https://github.com/rajusem/cassandra-operator.git
 ```
 
 #### Step2: Go to deploy folder 
